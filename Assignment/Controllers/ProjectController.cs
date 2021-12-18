@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Assignment.Models;
+using Assignment.Repository.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,36 +14,59 @@ namespace Assignment.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        // GET: api/<ProjectController>
+        private readonly IProjectRepository _repository;
+
+        public ProjectController(IProjectRepository projectRepository)
+        {
+            _repository = projectRepository;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("api/[controller]")]
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var projects = _repository.GetAllProjects();
+            return Ok(projects);
         }
 
-        // GET api/<ProjectController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("api/[controller]/{id}")]
+        public IActionResult Get(int id)
         {
-            return "value";
+            var project = _repository.GetProjectById(id);
+
+            if (project == null)
+                return NotFound("Project does not exist.");
+
+            return Ok(project);
         }
 
-        // POST api/<ProjectController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("api/[controller]")]
+        public IActionResult Post(Project project)
         {
+            var proj = _repository.AddProject(project);
+
+            if (proj == null)
+                return BadRequest("Unable to add user.");
+
+            return Ok("User created");
         }
 
-        // PUT api/<ProjectController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpDelete]
+        [Route("api/[controller]")]
+        public IActionResult Delete(int id)
         {
+            _repository.DeleteProject(id);
+            return Ok("Project Deleted");
         }
 
-        // DELETE api/<ProjectController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPatch]
+        [Route("api/[controller]")]
+        public IActionResult Update(Project project)
         {
+            _repository.UpdateProject(project);
+            return Ok("Project Data Updated");
         }
     }
 }

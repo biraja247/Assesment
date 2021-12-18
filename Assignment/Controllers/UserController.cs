@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Assignment.Models;
+using Assignment.Repository.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,36 +14,59 @@ namespace Assignment.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        // GET: api/<UserController>
+        private readonly IUserRepository _repository;
+
+        public UserController(IUserRepository userRepository)
+        {
+            _repository = userRepository;
+        }
+
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("api/[controller]")]
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var users = _repository.GetAllUsers();
+            return Ok(users);
         }
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet]
+        [Route("api/[controller]/{id}")]
+        public IActionResult Get(int id)
         {
-            return "value";
+            var user = _repository.GetUserById(id);
+
+            if (user == null)
+                return NotFound("User does not exist.");
+
+            return Ok(user);
         }
 
-        // POST api/<UserController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("api/[controller]")]
+        public IActionResult Post(User user)
         {
+            var user1 = _repository.AddUser(user);
+
+            if (user1 == null)
+                return BadRequest("Unable to add user.");
+
+            return Ok("User created");
         }
 
-        // PUT api/<UserController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpDelete]
+        [Route("api/[controller]")]
+        public IActionResult Delete(int id)
         {
+            _repository.DeleteUser(id);
+            return Ok("User Deleted");
         }
 
-        // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPatch]
+        [Route("api/[controller]")]
+        public IActionResult Update(User user)
         {
+            _repository.UpdateUser(user);
+            return Ok("User Data Updated");
         }
     }
 }
