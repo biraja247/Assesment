@@ -8,11 +8,11 @@ namespace Assignment.Repository.Interfaces
 {
     public interface IProjectRepository
     {
-        List<Project> GetAllProjects();
+        IEnumerable<Project> GetAllProjects();
 
         Project GetProjectById(int id);
 
-        Project AddProject(Project project);
+        bool AddProject(Project project);
 
         void DeleteProject(int id);
 

@@ -15,11 +15,19 @@ namespace Assignment.Repository
         {
             _dbContext = dbContext;
         }
-        public User AddUser(User user)
+        public bool AddUser(User user)
         {
-            _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
-            return user;
+            try
+            {
+                _dbContext.Users.Add(user);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+
         }
 
         public void DeleteUser(int id)

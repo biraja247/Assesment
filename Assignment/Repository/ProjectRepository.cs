@@ -16,11 +16,19 @@ namespace Assignment.Repository
             _dbContext = dbContext;
         }
 
-        public Project AddProject(Project project)
+        public bool AddProject(Project project)
         {
-            _dbContext.Projects.Add(project);
-            _dbContext.SaveChanges();
-            return project;
+            try
+            {
+                _dbContext.Projects.Add(project);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
+            
         }
 
         public void DeleteProject(int id)
@@ -30,7 +38,7 @@ namespace Assignment.Repository
             _dbContext.SaveChanges();
         }
 
-        public List<Project> GetAllProjects()
+        public IEnumerable<Project> GetAllProjects()
         {
             return _dbContext.Projects.ToList();
         }

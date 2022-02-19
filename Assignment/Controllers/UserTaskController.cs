@@ -22,10 +22,10 @@ namespace Assignment.Controllers
 
         [HttpGet]
         [Route("api/[controller]")]
-        public IActionResult Get()
+        public IEnumerable<UserTask> Get()
         {
             var utask = _repository.GetAllTasks();
-            return Ok(utask);
+            return utask;
         }
 
         [HttpGet]
@@ -46,7 +46,7 @@ namespace Assignment.Controllers
         {
             var utask1 = _repository.AddTask(utask);
 
-            if (utask1 == null)
+            if (utask1 == false)
                 return BadRequest("Unable to add task.");
 
             return Ok("Task created");

@@ -23,10 +23,10 @@ namespace Assignment.Controllers
 
         [HttpGet]
         [Route("api/[controller]")]
-        public IActionResult Get()
+        public IEnumerable<Project> Get()
         {
             var projects = _repository.GetAllProjects();
-            return Ok(projects);
+            return projects.ToList();
         }
 
         [HttpGet]
@@ -45,9 +45,8 @@ namespace Assignment.Controllers
         [Route("api/[controller]")]
         public IActionResult Post(Project project)
         {
-            var proj = _repository.AddProject(project);
-
-            if (proj == null)
+            bool flag = _repository.AddProject(project);
+            if (flag == false)
                 return BadRequest("Unable to add user.");
 
             return Ok("User created");

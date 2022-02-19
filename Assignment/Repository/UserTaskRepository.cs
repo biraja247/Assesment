@@ -15,11 +15,20 @@ namespace Assignment.Repository
         {
             _dbContext = dbContext;
         }
-        public UserTask AddTask(UserTask utask)
+        public bool AddTask(UserTask utask)
         {
-            _dbContext.UserTasks.Add(utask);
-            _dbContext.SaveChanges();
-            return utask;
+            try
+            {
+                _dbContext.UserTasks.Add(utask);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+           
         }
 
         public void DeleteTask(int id)

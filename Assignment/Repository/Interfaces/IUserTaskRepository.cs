@@ -12,7 +12,7 @@ namespace Assignment.Repository.Interfaces
 
         UserTask GetTasksById(int id);
 
-        UserTask AddTask(UserTask utask);
+        bool AddTask(UserTask utask);
 
         void DeleteTask(int id);
 

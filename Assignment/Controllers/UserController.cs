@@ -23,10 +23,10 @@ namespace Assignment.Controllers
 
         [HttpGet]
         [Route("api/[controller]")]
-        public IActionResult Get()
+        public IEnumerable<User> Get()
         {
             var users = _repository.GetAllUsers();
-            return Ok(users);
+            return users.ToList();
         }
 
         [HttpGet]
@@ -47,7 +47,7 @@ namespace Assignment.Controllers
         {
             var user1 = _repository.AddUser(user);
 
-            if (user1 == null)
+            if (user1 == false)
                 return BadRequest("Unable to add user.");
 
             return Ok("User created");

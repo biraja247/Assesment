@@ -12,7 +12,7 @@ namespace Assignment.Repository.Interfaces
 
         User GetUserById(int id);
 
-        User AddUser(User user);
+        bool AddUser(User user);
 
         void DeleteUser(int id);
 
